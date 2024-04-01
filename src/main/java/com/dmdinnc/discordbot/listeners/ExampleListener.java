@@ -1,6 +1,7 @@
 package com.dmdinnc.discordbot.listeners;
 
 import com.dmdinnc.discordbot.ConfigurationManager;
+import com.dmdinnc.discordbot.parser.ParsingUtils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -36,5 +37,13 @@ public class ExampleListener extends ListenerAdapter {
             }
         }
         System.out.println("Message received: " + message.getContentDisplay());
+        MessageChannel channel = event.getChannel();
+
+        if (event.getGuild().getId().equals(TEST_GUILD_ID) &&
+                channel.getId().equals(TEST_CHANNEL_ID)) {
+            int time = ParsingUtils.getMiniTime(content);
+            String author = message.getAuthor().getGlobalName();
+            channel.sendMessage("Mini time: " + time + " by " + author).queue(); // Important to call .queue() on the RestAction returned by sendMessage(...)
+        }
     }
 }
